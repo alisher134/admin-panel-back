@@ -1,0 +1,19 @@
+services:
+  postgres:
+    container_name: admin-panel-postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - admin-panel-postgres_data:/var/lib/postgresql/data
+    networks:
+      - admin-panel-backend
+    ports:
+      - 5432:5432
+
+volumes:
+  admin-panel-postgres_data:
+
+networks:
+  admin-panel-backend:
