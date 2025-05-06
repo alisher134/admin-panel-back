@@ -3,6 +3,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { Role } from "@prisma/client";
 import { verify } from "argon2";
@@ -18,6 +19,7 @@ export class AuthService {
 
   constructor(
     private prisma: PrismaService,
+    private configService: ConfigService,
     private jwt: JwtService,
     private userService: UserService
   ) {}
@@ -96,24 +98,20 @@ export class AuthService {
 
     res.cookie(this.REFRESH_TOKEN_NAME, refreshToken, {
       httpOnly: true,
-      domain: "datasec.org.kz",
+      domain: this.configService.getOrThrow("DOMAIN"),
       expires: expiresIn,
-      // true if production
       secure: true,
-      // lax if production
-      sameSite: "none",
+      sameSite: "lax",
     });
   }
 
   removeRefreshTokenFromResponse(res: Response) {
     res.cookie(this.REFRESH_TOKEN_NAME, "", {
       httpOnly: true,
-      domain: "datasec.org.kz",
+      domain: this.configService.getOrThrow("DOMAIN"),
       expires: new Date(0),
-      // true if production
       secure: true,
-      // lax if production
-      sameSite: "none",
+      sameSite: "lax",
     });
   }
 }
