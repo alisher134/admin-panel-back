@@ -58,7 +58,7 @@ async function bootstrap() {
   app.setGlobalPrefix("api");
   app.use(cookieParser());
   app.enableCors({
-    origin: ["https://datasec.org.kz", "http://localhost:3000"],
+    origin: ["https://datasec.org.kz"],
     credentials: true,
     exposedHeaders: "set-cookie",
   });
